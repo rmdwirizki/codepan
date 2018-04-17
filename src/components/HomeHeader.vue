@@ -2,6 +2,7 @@
   <header class="home-header">
     <div class="home-header-left home-header-block">
       <el-dropdown
+        v-if="!inIframe"
         @command="setBoilerplate"
         trigger="click"
         class="home-header-left-item">
@@ -23,7 +24,7 @@
           <el-dropdown-item command="rust">Rust</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <el-button
+      <el-button  
         v-if="!inIframe"
         class="home-header-left-item"
         style="margin-right:0"
