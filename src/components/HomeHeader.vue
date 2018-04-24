@@ -130,9 +130,9 @@
           <el-dropdown-item style="padding: 0;">
             <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://github.com/egoist/codepan"><link2-icon></link2-icon> Source Code</a>
           </el-dropdown-item>
-          <el-dropdown-item style="padding: 0;">
+          <!-- <el-dropdown-item style="padding: 0;">
             <a class="el-dropdown-menu__item fake-anchor" target="_blank" href="https://twitter.com/_egoistlily"><twitter-icon></twitter-icon> Follow me on Twitter</a>
-          </el-dropdown-item>
+          </el-dropdown-item> -->
           <el-dropdown-item style="padding: 0;">
             <a
               target="_blank"
@@ -151,7 +151,7 @@
         class="home-header-right-item"
         :href="url"
         target="_blank">
-        <img height="30" src="/favicon-180.png" alt="codepan">
+        <img height="30" src="/favicon-custom-180.png" alt="codepan">
       </a>
     </div>
   </header>
@@ -283,15 +283,17 @@
             handler: () => {
               this.promptGitHubToken()
             }
-          }, {
-            text: 'OAuth',
-            type: 2,
-            handler: () => {
-              const loginURL = process.env.NODE_ENV === 'development' ? 'http://localhost:4001/login' : 'https://gh-login.codepan.net/login'
+          }, 
+          // {
+          //   text: 'OAuth',
+          //   type: 2,
+          //   handler: () => {
+          //     const loginURL = process.env.NODE_ENV === 'development' ? 'http://localhost:4001/login' : 'https://gh-login.codepan.net/login'
 
-              popup(loginURL, 'gh login', 600, 400)
-            }
-          }]
+          //     popup(loginURL, 'gh login', 600, 400)
+          //   }
+          // }
+          ]
         })
       },
       promptGitHubToken() {
