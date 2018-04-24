@@ -64,11 +64,26 @@ function importAll(r) {
 }
 importAll(require.context('@/boilerplates', true, /index.js$/))
 
+// Set default visible pans
+function findGetParameter(parameterName) {
+  var result = null,
+      tmp = [];
+  var items = location.search.substr(1).split("&");
+  for (var index = 0; index < items.length; index++) {
+      tmp = items[index].split("=");
+      if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+  }
+  return result;
+}
+const defaultPansParams = findGetParameter('default-pans');
+let visiblePans = (defaultPansParams) 
+  ? defaultPansParams.split(",") : ['html', 'js', 'output'];
+
 const store = new Vuex.Store({
   state: {
     ...emptyPans(),
     logs: [],
-    visiblePans: ['html', 'js', 'output'],
+    visiblePans: visiblePans,
     activePan: 'js',
     autoRun: false,
     githubToken: localStorage.getItem('codepan:gh-token') || '',
@@ -233,7 +248,7 @@ const store = new Vuex.Store({
     async setGist({ commit, dispatch, state }, id) {
       const data = await api(`gists/${id}`, state.githubToken, progress.done)
       const files = data.files
-
+      
       if (!files) return
 
       const main = {
@@ -252,6 +267,13 @@ const store = new Vuex.Store({
           }
         }
       }
+
+      // If default pans parameters is set on route
+      // overwrite gist `showPans`
+      if (defaultPansParams) {
+        main.showPans = state.visiblePans;
+      }
+
       await dispatch('setBoilerplate', main)
 
       delete data.files
