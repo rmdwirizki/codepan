@@ -256,21 +256,18 @@ export default {
             activePan: this.activePan
           }
         )
-        const params = {}
-        if (token) {
-          // eslint-disable-next-line camelcase
-          params.access_token = token
-        }
+
         const shouldUpdateGist = this.canUpdateGist && !saveNew
-        const url = `https://api.github.com/gists${
-          shouldUpdateGist ?
-          `/${this.$route.params.gist}` :
-          ''
-        }`
+        const url = `https://api.github.com/gists${shouldUpdateGist ? `/${this.$route.params.gist}` : ''}`
         const method = shouldUpdateGist ? 'PATCH' : 'POST'
+
+        const headers = token
+          ? { Authorization: `token ${token}` }
+          : {}
+
         const { data } = await axios(url, {
-          params,
           method,
+          headers,
           data: {
             public: false,
             files
@@ -281,15 +278,14 @@ export default {
           this.editorSaved()
         } else {
           this.$router.push(`/gist/${data.id}`)
+
           if (token) {
-            // Update gist id in the description of newly created gist
+            // Update gist description (optional but also needs Authorization header)
             axios(`https://api.github.com/gists/${data.id}`, {
               method: 'PATCH',
-              params,
+              headers,
               data: {
-                description: `Try it online! https://code.duapx.id/gist/${
-                  data.id
-                }`
+                description: `Try it online! https://code.duapx.id/gist/${data.id}`
               }
             }).catch(err => console.log(err))
           }
