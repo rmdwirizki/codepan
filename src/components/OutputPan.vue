@@ -287,7 +287,7 @@ export default {
               method: 'PATCH',
               params,
               data: {
-                description: `Try it online! https://code.develoka.com/gist/${
+                description: `Try it online! https://code.duapx.id/gist/${
                   data.id
                 }`
               }
